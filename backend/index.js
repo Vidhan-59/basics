@@ -1,14 +1,18 @@
-import express from 'express'
-// require('dotenv').config();
+import express from 'express';
 import dotenv from 'dotenv';
-// import cors from 'cors'
+import connectDb from './db/index.js';
+import { app } from './app.js'; // Make sure to import the app from app.js
+
 dotenv.config();
-const app= express()
-// app.use(cors)
 
+const port = process.env.PORT
 
-app.get('/' , (req, res)=>{
-    res.send("<h1>Vidhan Here 59</h1>")
-})
-const port  = process.env.PORT;
-app.listen(port , ()=>console.log('Server started'))
+connectDb()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Server started on port ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Database connection error:", error);
+  });
